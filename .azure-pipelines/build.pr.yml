@@ -1,0 +1,19 @@
+trigger: none
+
+pr:
+- master
+- develop
+
+pool:
+  vmImage: windows-2019
+
+resources:
+  repositories:
+  - repository: templates
+    type: git
+    name: GitHub.Public/YAML.Templates
+
+steps:
+  - template: build.pr.yml@templates
+    parameters:
+      projectName: SendIt.HtmlBuilder
