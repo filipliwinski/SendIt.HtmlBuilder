@@ -68,7 +68,7 @@ namespace SendIt.HtmlBuilder
             // Add custom attributes.
             AttributesToHtml(sb);
 
-            // Img is self closing tag.
+            // Img is a self-closing tag.
             sb.Append(">");
 
             return sb;
