@@ -28,6 +28,8 @@ namespace SendIt.HtmlBuilder.Helpers
 {
     public static class HtmlParser
     {
+        private static readonly string[] selfClosingTags = new string[] { "area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr" };
+
         public static ICollection<Node> Parse(string htmlString)
         {
             var nodes = new List<Node>();
@@ -50,22 +52,138 @@ namespace SendIt.HtmlBuilder.Helpers
 
             var elementString = GetFirstElement(htmlString);
 
-            HtmlElement element;
+            var elementContent = GetElementContent(elementString);
 
-            switch (tag)
+            HtmlElement element = CreateHtmlElement(tag);
+
+            element.InnerHtml = elementContent;
+
+            element.Id = GetElementId(elementString);
+
+            element.Style = GetElementStyle(elementString);
+
+            if (element is Img img)
             {
+                img.Src = GetElementAttribute("src", elementString);
+                img.Alt = GetElementAttribute("alt", elementString);
+                var height = GetElementAttribute("height", elementString);
+                if (height != null)
+                {
+                    img.Height = int.Parse(height);
+                }
+                var width = GetElementAttribute("width", elementString);
+                if (width != null)
+                {
+                    img.Width = int.Parse(width);
+                }
+            }
+
+            nodes.Add(element);
+
+            var remainigHtmlString = htmlString.Substring(elementString.Length);
+
+            if (!string.IsNullOrEmpty(remainigHtmlString))
+            {
+                var remainingNodes = Parse(remainigHtmlString);
+
+                foreach (var node in remainingNodes)
+                {
+                    nodes.Add(node);
+                }
+            }
+
+            return nodes;
+        }
+
+        public static string GetElementFullTag(string htmlString)
+        {
+            return htmlString.Substring(0, htmlString.IndexOf('>') + 1);
+        }
+
+        public static Style GetElementStyle(string htmlString)
+        {
+            var styleString = GetElementAttribute("style", htmlString);
+
+            if (string.IsNullOrEmpty(styleString))
+            {
+                return null;
+            }
+
+            var stypeProperties = styleString.Split(';');
+
+            var style = new Style();
+
+            foreach (var s in stypeProperties)
+            {
+                if (!string.IsNullOrEmpty(s))
+                {
+                    var property = s.Split(':');
+
+                    style.Add(property[0], property[1]);
+                }
+            }
+
+            return style;
+        }
+
+        public static string GetElementId(string htmlString)
+        {
+            return GetElementAttribute("id", htmlString);
+        }
+
+        public static string GetElementAttribute(string attribute, string htmlString)
+        {
+            var elementFullTag = GetElementFullTag(htmlString);
+
+            var attributeIndex = elementFullTag.IndexOf($"{attribute}=");
+
+            if (attributeIndex > 0)
+            {
+                var openingQuotationMarkIndex = attributeIndex + attribute.Length + 2;
+                var closingQuotationMarkIndex = elementFullTag.IndexOf("\"", openingQuotationMarkIndex);
+                return htmlString.Substring(openingQuotationMarkIndex, closingQuotationMarkIndex - openingQuotationMarkIndex);
+            }
+
+            return null;
+        }
+
+        public static HtmlElement CreateHtmlElement(string tag)
+        {
+            HtmlElement element;
+            switch (tag.ToLower())
+            {
+                case "body":
+                    element = new Body();
+                    break;
+                case "h1":
+                    element = new H1();
+                    break;
+                case "h2":
+                    element = new H2();
+                    break;
+                case "h3":
+                    element = new H3();
+                    break;
+                case "h4":
+                    element = new H4();
+                    break;
+                case "h5":
+                    element = new H5();
+                    break;
+                case "h6":
+                    element = new H6();
+                    break;
+                case "img":
+                    element = new Img("");
+                    break;
                 case "p":
                     element = new P();
                     break;
                 default:
-                    throw new Exception("Not supported.");
+                    throw new NotSupportedException($"<{tag.ToLower()}> is not supported.");
             }
 
-            element.InnerHtml = elementString;
-
-            nodes.Add(element);
-
-            return nodes;
+            return element;
         }
 
         public static string GetFirstTag(string htmlString)
@@ -78,7 +196,7 @@ namespace SendIt.HtmlBuilder.Helpers
             var tag = GetFirstTag(htmlString);
 
             var closeTag = $"</{tag}>";
-            if (tag == "img" || tag == "br" || tag == "hr")
+            if (IsSelfClosingTag(tag))
             {
                 closeTag = ">";
             }
@@ -86,18 +204,35 @@ namespace SendIt.HtmlBuilder.Helpers
             return htmlString.Substring(0, htmlString.IndexOf(closeTag) + closeTag.Length);
         }
 
-        public static string GetFirstElementContent(string htmlString)
+        public static string GetElementContent(string htmlString)
         {
             var tag = GetFirstTag(htmlString);
 
-            if (tag == "img" || tag == "br" || tag == "hr")
+            if (IsSelfClosingTag(tag))
             {
                 return "";
             }
 
+            var openTag = $"<{tag}";
+            var openTagClose = htmlString.IndexOf('>');
             var closeTag = $"</{tag}>";
 
-            return htmlString.Substring(htmlString.IndexOf('>') + 1, htmlString.IndexOf(closeTag));
+            if (!htmlString.StartsWith(openTag))
+            {
+                throw new FormatException("Opening tag is missing.");
+            }
+
+            if (!htmlString.EndsWith(closeTag))
+            {
+                throw new FormatException("Closing tag is missing.");
+            }
+
+            return htmlString.Substring(openTagClose + 1, htmlString.Length - openTagClose - 1 - closeTag.Length);
+        }
+
+        public static bool IsSelfClosingTag(string tag)
+        {
+            return Array.IndexOf(selfClosingTags, tag) != -1;
         }
     }
 }
