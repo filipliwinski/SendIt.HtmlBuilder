@@ -17,3 +17,5 @@ steps:
   - template: build.pr.yml@templates
     parameters:
       projectName: SendIt.HtmlBuilder
+      unitTestsProjectName: SendIt.HtmlBuilder.Tests
+      sonarCloudProjectKey: filipliwinski_SendIt.HtmlBuilder
