@@ -36,7 +36,7 @@ namespace SendIt.HtmlBuilder.Helpers
 
             if (string.IsNullOrEmpty(htmlString))
             {
-                throw new FormatException("Null or empty string cannot be parsed.");
+                throw new ArgumentNullException(htmlString, "Null or empty string cannot be parsed.");
             }
             if (htmlString[0] != '<' && htmlString[htmlString.Length - 1] != '>')
             {

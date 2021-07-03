@@ -1,4 +1,28 @@
+// MIT License
+//  
+//  Copyright (c) 2021 Filip Liwiński
+//  
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//  
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//  
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
+//
+
 using SendIt.HtmlBuilder.Helpers;
+using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -6,6 +30,22 @@ namespace SendIt.HtmlBuilder.Tests.Helpers
 {
     public class HtmlParserTests
     {
+        [Fact]
+        public void WhenProvidedEmptyString_ThenThrowsArgumentNullException()
+        {
+            var input = "";
+
+            Assert.Throws<ArgumentNullException>(() => HtmlParser.Parse(input));
+        }
+
+        [Fact]
+        public void WhenSyntaxIsInvalid_ThenThrowsFormatException()
+        {
+            var input = "<This is not a valid HTML code.>";
+
+            Assert.Throws<FormatException>(() => HtmlParser.Parse(input));
+        }
+
         [Fact]
         public void ParsePWithText()
         {
@@ -60,12 +100,12 @@ namespace SendIt.HtmlBuilder.Tests.Helpers
                 new List<HtmlElement>
                 {
                     new P("test"),
-                    new H3(),
+                    new H1(),
                     new Img("")
                 },
                 new List<HtmlElement>
                 {
-                    new H3(),
+                    new H2(),
                     new Img(""),
                     new P("test")
                 },
@@ -180,9 +220,25 @@ namespace SendIt.HtmlBuilder.Tests.Helpers
         }
 
         [Fact]
+        public void WhenElementOpeningTagIsMissing_ThenThrowsFormatException()
+        {
+            var input = "This is a paragraph.</p>";
+
+            Assert.Throws<FormatException>(() => HtmlParser.GetElementContent(input));
+        }
+
+        [Fact]
+        public void WhenElementClosingTagIsMissing_ThenThrowsFormatException()
+        {
+            var input = "<p>This is a paragraph.";
+
+            Assert.Throws<FormatException>(() => HtmlParser.GetElementContent(input));
+        }
+
+        [Fact]
         public void WhenElementIsPAndContentIsText_ThenReturnsText()
         {
-            var elementContent = "This is paragraph.";
+            var elementContent = "This is a paragraph.";
             var element = new P(elementContent);
             var elementString = element.ToHtml();
 
@@ -194,7 +250,7 @@ namespace SendIt.HtmlBuilder.Tests.Helpers
         [Fact]
         public void WhenElementIsH3AndContentIsText_ThenReturnsText()
         {
-            var elementContent = "This is level 3 heading";
+            var elementContent = "This is a level 3 heading";
             var element = new H3(elementContent);
 
             var elementString = element.ToHtml();
@@ -220,7 +276,7 @@ namespace SendIt.HtmlBuilder.Tests.Helpers
         public void WhenElementIsBodyAndContentIsP_ThenReturnsP()
         {
             var element = new Body();
-            var p = new P("This is paragraph.");
+            var p = new P("This is a paragraph.");
             var elementContent = p.ToHtml();
 
             element.AppendChild(p);
