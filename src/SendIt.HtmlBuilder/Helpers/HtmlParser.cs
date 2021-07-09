@@ -43,10 +43,6 @@ namespace SendIt.HtmlBuilder.Helpers
                 nodes.Add(new Text(htmlString));
                 return nodes;
             }
-            if (htmlString[0] != '<' || htmlString[htmlString.Length - 1] != '>')
-            {
-                throw new FormatException("Invalid syntax.");
-            }
 
             var tag = GetFirstTag(htmlString);
 
@@ -188,6 +184,10 @@ namespace SendIt.HtmlBuilder.Helpers
 
         public static string GetFirstTag(string htmlString)
         {
+            if (!htmlString.Contains(">"))
+            {
+                throw new FormatException("Invalid syntax.");
+            }
             return htmlString.Substring(1, htmlString.IndexOf('>') - 1).Split(' ')[0];
         }
 

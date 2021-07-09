@@ -38,11 +38,15 @@ namespace SendIt.HtmlBuilder.Tests.Helpers
             Assert.Throws<ArgumentNullException>(() => HtmlParser.Parse(input));
         }
 
-        [Fact]
-        public void WhenSyntaxIsInvalid_ThenThrowsFormatException()
+        [Theory]
+        [InlineData("<This is not a valid HTML code.>")]
+        [InlineData("<This is not a valid HTML code.")]
+        [InlineData("p>This is not a valid HTML code.</p>")]
+        [InlineData("<p>This is not a valid HTML code.<p>")]
+        [InlineData("</p>This is not a valid HTML code.</p>")]
+        [InlineData("<h1>This is not a valid HTML code.</h2>")]
+        public void WhenSyntaxIsInvalid_ThenThrowsFormatException(string input)
         {
-            var input = "<This is not a valid HTML code.>";
-
             Assert.Throws<FormatException>(() => HtmlParser.Parse(input));
         }
 
