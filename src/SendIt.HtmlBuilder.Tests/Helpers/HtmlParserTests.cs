@@ -81,6 +81,41 @@ namespace SendIt.HtmlBuilder.Tests.Helpers
         }
 
         [Fact]
+        public void ParseBodyWithHeadings()
+        {
+            var h1 = new H1("test");
+            h1.Style.Add(StyleProperty.Color, "#000000");
+            h1.Id = "H1";
+            var h2 = new H2("test");
+            h2.Style.Add(StyleProperty.Color, "#00FF00");
+            h2.Id = "H2";
+            var h3 = new H3("test");
+            h3.Style.Add(StyleProperty.Color, "#FF0000");
+            h3.Id = "H3";
+            var h4 = new H4("test");
+            h4.Style.Add(StyleProperty.Color, "#0000FF");
+            h4.Id = "H4";
+            var h5 = new H5("test");
+            h5.Style.Add(StyleProperty.Color, "#0F0F0F");
+            h5.Id = "H5";
+            var h6 = new H6("test");
+            h6.Style.Add(StyleProperty.Color, "#F0F0F0");
+            h6.Id = "H6";
+            var body = new Body();
+            body.AppendChild(h1)
+                .AppendChild(h2)
+                .AppendChild(h3)
+                .AppendChild(h4)
+                .AppendChild(h5)
+                .AppendChild(h6);
+
+            var nodes = HtmlParser.Parse(body.ToHtml()) as List<Node>;
+
+            var parsedBody = Assert.IsType<Body>(nodes[0]);
+            Assert.Equal(body.InnerHtml, parsedBody.InnerHtml);
+        }
+
+        [Fact]
         public void GetFirstTag()
         {
             var nodes = new List<HtmlElement>
