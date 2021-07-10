@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SendIt.HtmlBuilder", "SendIt.HtmlBuilder\SendIt.HtmlBuilder.csproj", "{9C385D69-0498-4C0F-A832-6E4E29935C0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendIt.HtmlBuilder.Demo", "SendIt.HtmlBuilder.Demo\SendIt.HtmlBuilder.Demo.csproj", "{5A4A9CC9-4C8B-495B-ABC9-BCF1457A4EA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SendIt.HtmlBuilder.Demo", "SendIt.HtmlBuilder.Demo\SendIt.HtmlBuilder.Demo.csproj", "{5A4A9CC9-4C8B-495B-ABC9-BCF1457A4EA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendIt.HtmlBuilder.Tests", "SendIt.HtmlBuilder.Tests\SendIt.HtmlBuilder.Tests.csproj", "{872EA2FD-DACF-4700-8F82-0951CE444805}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{5A4A9CC9-4C8B-495B-ABC9-BCF1457A4EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A4A9CC9-4C8B-495B-ABC9-BCF1457A4EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A4A9CC9-4C8B-495B-ABC9-BCF1457A4EA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{872EA2FD-DACF-4700-8F82-0951CE444805}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{872EA2FD-DACF-4700-8F82-0951CE444805}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{872EA2FD-DACF-4700-8F82-0951CE444805}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{872EA2FD-DACF-4700-8F82-0951CE444805}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -21,7 +21,9 @@
 //  SOFTWARE.
 //
 
+using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace SendIt.HtmlBuilder
 {
@@ -32,6 +34,11 @@ namespace SendIt.HtmlBuilder
         public int Count { get { return styleProperties.Count; } }
         public ICollection<StyleProperty> Keys { get { return styleProperties.Keys; } }
         public ICollection<string> Values { get { return styleProperties.Values; } }
+
+        public Style Add(string property, string value)
+        {
+            return Add((StyleProperty)Enum.Parse(typeof(StyleProperty), property.Trim().Replace("-", ""), ignoreCase: true), value.Trim());
+        }
 
         public Style Add(StyleProperty property, string value)
         {
@@ -44,6 +51,18 @@ namespace SendIt.HtmlBuilder
         {
             get => styleProperties[index];
             set => styleProperties[index] = value;
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+
+            foreach (var property in styleProperties)
+            {
+                sb.Append($"{property.Key.ToString().ToLower()}: {property.Value}; ");
+            }
+
+            return sb.ToString().Trim();
         }
     }
 }
