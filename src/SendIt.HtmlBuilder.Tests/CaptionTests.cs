@@ -21,38 +21,22 @@
 //  SOFTWARE.
 //
 
-using System.Text;
+using Xunit;
 
-namespace SendIt.HtmlBuilder
+namespace SendIt.HtmlBuilder.Tests
 {
-    public class Head : HtmlElement
+    public class CaptionTests
     {
-        public string Title { get; set; }
-
-        public Head() : base(null) { }
-
-        public Head(string title) : base(null)
+        [Fact]
+        public void CreatesCaptionElement()
         {
-            Title = title;
-        }
+            var element = new Caption("caption");
 
-        public override StringBuilder ToHtml(StringBuilder sb)
-        {
-            OpenTag(sb);
+            var elementHtmlString = element.ToHtml();
 
-            if (!string.IsNullOrEmpty(Title))
-            {
-                sb.Append($"<title>{Title}</title>");
-            }
-
-            CloseTag(sb);
-
-            return sb;
-        }
-
-        public override StringBuilder ToText(StringBuilder sb)
-        {
-            return sb;
+            Assert.IsType<Caption>(element);
+            Assert.StartsWith("<caption", elementHtmlString);
+            Assert.EndsWith("</caption>", elementHtmlString);
         }
     }
 }
