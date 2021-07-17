@@ -29,7 +29,7 @@ namespace SendIt.HtmlBuilder
     {
         public int? Span { get; set; }
 
-        public Col(int? span) : base(null)
+        public Col(int? span = null) : base(null)
         {
             Span = span;
         }
