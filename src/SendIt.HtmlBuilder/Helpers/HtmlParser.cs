@@ -74,6 +74,42 @@ namespace SendIt.HtmlBuilder.Helpers
                 }
             }
 
+            if (element is TH th)
+            {
+                th.Abbr = GetElementAttribute("abbr", elementString);
+                var colSpan = GetElementAttribute("colspan", elementString);
+                if (colSpan != null)
+                {
+                    th.ColSpan = int.Parse(colSpan);
+                }
+                th.Headers = GetElementAttribute("headers", elementString);
+                var rowSpan = GetElementAttribute("rowspan", elementString);
+                if (rowSpan != null)
+                {
+                    th.RowSpan = int.Parse(rowSpan);
+                }
+                var scope = GetElementAttribute("scope", elementString);
+                if (scope != null)
+                {
+                    th.Scope = (Scope)Enum.Parse(typeof(Scope), scope, ignoreCase: true); ;
+                }
+            }
+
+            if (element is TD td)
+            {
+                var colSpan = GetElementAttribute("colspan", elementString);
+                if (colSpan != null)
+                {
+                    td.ColSpan = int.Parse(colSpan);
+                }
+                td.Headers = GetElementAttribute("headers", elementString);
+                var rowSpan = GetElementAttribute("rowspan", elementString);
+                if (rowSpan != null)
+                {
+                    td.RowSpan = int.Parse(rowSpan);
+                }
+            }
+
             nodes.Add(element);
 
             var remainigHtmlString = htmlString.Substring(elementString.Length);
@@ -151,6 +187,15 @@ namespace SendIt.HtmlBuilder.Helpers
                 case "body":
                     element = new Body();
                     break;
+                case "caption":
+                    element = new Caption();
+                    break;
+                case "col":
+                    element = new Col();
+                    break;
+                case "colgroup":
+                    element = new ColGroup();
+                    break;
                 case "h1":
                     element = new H1();
                     break;
@@ -169,11 +214,39 @@ namespace SendIt.HtmlBuilder.Helpers
                 case "h6":
                     element = new H6();
                     break;
+                case "head":
+                    element = new Head();
+                    break;
+                // TODO: support for parsing Html tag
+                //case "html":
+                //    element = new Html();
+                //    break;
                 case "img":
                     element = new Img("");
                     break;
                 case "p":
                     element = new P();
+                    break;
+                case "table":
+                    element = new Table();
+                    break;
+                case "tbody":
+                    element = new TBody();
+                    break;
+                case "td":
+                    element = new TD();
+                    break;
+                case "tfoot":
+                    element = new TFoot();
+                    break;
+                case "th":
+                    element = new TH();
+                    break;
+                case "thead":
+                    element = new THead();
+                    break;
+                case "tr":
+                    element = new TR();
                     break;
                 default:
                     throw new NotSupportedException($"<{tag.ToLower()}> is not supported.");

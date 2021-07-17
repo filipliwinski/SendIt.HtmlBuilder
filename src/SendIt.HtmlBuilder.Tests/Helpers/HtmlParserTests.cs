@@ -71,8 +71,7 @@ namespace SendIt.HtmlBuilder.Tests.Helpers
             p.Style.Add(StyleProperty.Color, "#FFFFFF");
             p.Id = "id";
             var body = new Body();
-            body.AppendChild(p);
-            body.AppendChild(new Img("https://picsum.photos/400/300"));
+            body.AppendChild(p).AppendChild(new Img("https://picsum.photos/400/300"));
 
             var nodes = HtmlParser.Parse(body.ToHtml()) as List<Node>;
 
@@ -113,6 +112,53 @@ namespace SendIt.HtmlBuilder.Tests.Helpers
 
             var parsedBody = Assert.IsType<Body>(nodes[0]);
             Assert.Equal(body.InnerHtml, parsedBody.InnerHtml);
+        }
+
+        [Fact]
+        public void ParseTableWithHeaderBodyAndFooter()
+        {
+            var table = new Table()
+                .AppendChild(new THead()
+                    .AppendChild(new TR()
+                        .AppendChild(new TH("Col 1 header"))
+                        .AppendChild(new TH("Col 2 header"))))
+                .AppendChild(new TBody()
+                    .AppendChild(new TR()
+                        .AppendChild(new TH("Row 1 header"))
+                        .AppendChild(new TD("Col 2 row 1 content")))
+                    .AppendChild(new TR()
+                        .AppendChild(new TH("Row 2 content"))
+                        .AppendChild(new TD("Col 2 row 2 content"))))
+                .AppendChild(new TFoot()
+                    .AppendChild(new TR()
+                        .AppendChild(new TH("Row 3 header"))
+                        .AppendChild(new TD("Col 2 row 3 content")))) as Table;
+
+            var nodes = HtmlParser.Parse(table.ToHtml()) as List<Node>;
+
+            var parsedTable = Assert.IsType<Table>(nodes[0]);
+            Assert.Equal(table.InnerHtml, parsedTable.InnerHtml);
+        }
+
+        [Fact]
+        public void ParseTableWithCaptionAndColGroup()
+        {
+            var table = new Table()
+                .AppendChild(new Caption("Caption"))
+                .AppendChild(new ColGroup()
+                    .AppendChild(new Col())
+                    .AppendChild(new Col()))
+                .AppendChild(new TR()
+                    .AppendChild(new TH("Col 1 header", scope: Scope.Col))
+                    .AppendChild(new TH("Col 2 header", scope: Scope.Col)))
+                .AppendChild(new TR()
+                    .AppendChild(new TD("Col 1 row 2 content"))
+                    .AppendChild(new TD("Col 2 row 2 content"))) as Table;
+
+            var nodes = HtmlParser.Parse(table.ToHtml()) as List<Node>;
+
+            var parsedTable = Assert.IsType<Table>(nodes[0]);
+            Assert.Equal(table.InnerHtml, parsedTable.InnerHtml);
         }
 
         [Fact]
