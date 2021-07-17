@@ -60,54 +60,17 @@ namespace SendIt.HtmlBuilder.Helpers
 
             if (element is Img img)
             {
-                img.Src = GetElementAttribute("src", elementString);
-                img.Alt = GetElementAttribute("alt", elementString);
-                var height = GetElementAttribute("height", elementString);
-                if (height != null)
-                {
-                    img.Height = int.Parse(height);
-                }
-                var width = GetElementAttribute("width", elementString);
-                if (width != null)
-                {
-                    img.Width = int.Parse(width);
-                }
+                GetImgAttributes(img, elementString);
             }
 
             if (element is TH th)
             {
-                th.Abbr = GetElementAttribute("abbr", elementString);
-                var colSpan = GetElementAttribute("colspan", elementString);
-                if (colSpan != null)
-                {
-                    th.ColSpan = int.Parse(colSpan);
-                }
-                th.Headers = GetElementAttribute("headers", elementString);
-                var rowSpan = GetElementAttribute("rowspan", elementString);
-                if (rowSpan != null)
-                {
-                    th.RowSpan = int.Parse(rowSpan);
-                }
-                var scope = GetElementAttribute("scope", elementString);
-                if (scope != null)
-                {
-                    th.Scope = (Scope)Enum.Parse(typeof(Scope), scope, ignoreCase: true); ;
-                }
+                GetTHAttributes(th, elementString);
             }
 
             if (element is TD td)
             {
-                var colSpan = GetElementAttribute("colspan", elementString);
-                if (colSpan != null)
-                {
-                    td.ColSpan = int.Parse(colSpan);
-                }
-                td.Headers = GetElementAttribute("headers", elementString);
-                var rowSpan = GetElementAttribute("rowspan", elementString);
-                if (rowSpan != null)
-                {
-                    td.RowSpan = int.Parse(rowSpan);
-                }
+                GetTDAttributes(td, elementString);
             }
 
             nodes.Add(element);
@@ -125,6 +88,58 @@ namespace SendIt.HtmlBuilder.Helpers
             }
 
             return nodes;
+        }
+
+        private static void GetTDAttributes(TD td, string elementString)
+        {
+            var colSpan = GetElementAttribute("colspan", elementString);
+            if (colSpan != null)
+            {
+                td.ColSpan = int.Parse(colSpan);
+            }
+            td.Headers = GetElementAttribute("headers", elementString);
+            var rowSpan = GetElementAttribute("rowspan", elementString);
+            if (rowSpan != null)
+            {
+                td.RowSpan = int.Parse(rowSpan);
+            }
+        }
+
+        private static void GetTHAttributes(TH th, string elementString)
+        {
+            th.Abbr = GetElementAttribute("abbr", elementString);
+            var colSpan = GetElementAttribute("colspan", elementString);
+            if (colSpan != null)
+            {
+                th.ColSpan = int.Parse(colSpan);
+            }
+            th.Headers = GetElementAttribute("headers", elementString);
+            var rowSpan = GetElementAttribute("rowspan", elementString);
+            if (rowSpan != null)
+            {
+                th.RowSpan = int.Parse(rowSpan);
+            }
+            var scope = GetElementAttribute("scope", elementString);
+            if (scope != null)
+            {
+                th.Scope = (Scope)Enum.Parse(typeof(Scope), scope, ignoreCase: true);
+            }
+        }
+
+        private static void GetImgAttributes(Img img, string elementString)
+        {
+            img.Src = GetElementAttribute("src", elementString);
+            img.Alt = GetElementAttribute("alt", elementString);
+            var height = GetElementAttribute("height", elementString);
+            if (height != null)
+            {
+                img.Height = int.Parse(height);
+            }
+            var width = GetElementAttribute("width", elementString);
+            if (width != null)
+            {
+                img.Width = int.Parse(width);
+            }
         }
 
         public static string GetElementFullTag(string htmlString)
@@ -218,9 +233,6 @@ namespace SendIt.HtmlBuilder.Helpers
                     element = new Head();
                     break;
                 // TODO: support for parsing Html tag
-                //case "html":
-                //    element = new Html();
-                //    break;
                 case "img":
                     element = new Img("");
                     break;
