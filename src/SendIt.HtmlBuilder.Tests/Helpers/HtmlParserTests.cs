@@ -38,6 +38,14 @@ namespace SendIt.HtmlBuilder.Tests.Helpers
             Assert.Throws<ArgumentNullException>(() => HtmlParser.Parse(input));
         }
 
+        [Fact]
+        public void WhenProvidedNotValidElement_ThenThrowsNotSupportedException()
+        {
+            var input = "<qwerty>QWERTY</qwerty>";
+
+            Assert.Throws<NotSupportedException>(() => HtmlParser.Parse(input));
+        }
+
         [Theory]
         [InlineData("<This is not a valid HTML code.>")]
         [InlineData("<This is not a valid HTML code.")]
