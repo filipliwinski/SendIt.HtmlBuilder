@@ -170,6 +170,35 @@ namespace SendIt.HtmlBuilder.Tests.Helpers
         }
 
         [Fact]
+        public void ParseTDWithAttributes()
+        {
+            var td = new TD("Content", 1, "header", 1);
+
+            var nodes = HtmlParser.Parse(td.ToHtml()) as List<Node>;
+
+            var parsedTD = Assert.IsType<TD>(nodes[0]);
+            Assert.Equal(td.ColSpan, parsedTD.ColSpan);
+            Assert.Equal(td.Headers, parsedTD.Headers);
+            Assert.Equal(td.RowSpan, parsedTD.RowSpan);
+            Assert.Equal(td.InnerHtml, parsedTD.InnerHtml);
+        }
+
+        [Fact]
+        public void ParseTHWithAttributes()
+        {
+            var th = new TH("Content", "abbr", 1, "header", 1, Scope.Col);
+
+            var nodes = HtmlParser.Parse(th.ToHtml()) as List<Node>;
+
+            var parsedTH = Assert.IsType<TH>(nodes[0]);
+            Assert.Equal(th.ColSpan, parsedTH.ColSpan);
+            Assert.Equal(th.Headers, parsedTH.Headers);
+            Assert.Equal(th.RowSpan, parsedTH.RowSpan);
+            Assert.Equal(th.Scope, parsedTH.Scope);
+            Assert.Equal(th.InnerHtml, parsedTH.InnerHtml);
+        }
+
+        [Fact]
         public void GetFirstTag()
         {
             var nodes = new List<HtmlElement>
