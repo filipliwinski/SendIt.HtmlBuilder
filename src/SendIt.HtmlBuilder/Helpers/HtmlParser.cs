@@ -60,18 +60,17 @@ namespace SendIt.HtmlBuilder.Helpers
 
             if (element is Img img)
             {
-                img.Src = GetElementAttribute("src", elementString);
-                img.Alt = GetElementAttribute("alt", elementString);
-                var height = GetElementAttribute("height", elementString);
-                if (height != null)
-                {
-                    img.Height = int.Parse(height);
-                }
-                var width = GetElementAttribute("width", elementString);
-                if (width != null)
-                {
-                    img.Width = int.Parse(width);
-                }
+                GetImgAttributes(img, elementString);
+            }
+
+            if (element is TH th)
+            {
+                GetTHAttributes(th, elementString);
+            }
+
+            if (element is TD td)
+            {
+                GetTDAttributes(td, elementString);
             }
 
             nodes.Add(element);
@@ -89,6 +88,58 @@ namespace SendIt.HtmlBuilder.Helpers
             }
 
             return nodes;
+        }
+
+        private static void GetTDAttributes(TD td, string elementString)
+        {
+            var colSpan = GetElementAttribute("colspan", elementString);
+            if (colSpan != null)
+            {
+                td.ColSpan = int.Parse(colSpan);
+            }
+            td.Headers = GetElementAttribute("headers", elementString);
+            var rowSpan = GetElementAttribute("rowspan", elementString);
+            if (rowSpan != null)
+            {
+                td.RowSpan = int.Parse(rowSpan);
+            }
+        }
+
+        private static void GetTHAttributes(TH th, string elementString)
+        {
+            th.Abbr = GetElementAttribute("abbr", elementString);
+            var colSpan = GetElementAttribute("colspan", elementString);
+            if (colSpan != null)
+            {
+                th.ColSpan = int.Parse(colSpan);
+            }
+            th.Headers = GetElementAttribute("headers", elementString);
+            var rowSpan = GetElementAttribute("rowspan", elementString);
+            if (rowSpan != null)
+            {
+                th.RowSpan = int.Parse(rowSpan);
+            }
+            var scope = GetElementAttribute("scope", elementString);
+            if (scope != null)
+            {
+                th.Scope = (Scope)Enum.Parse(typeof(Scope), scope, ignoreCase: true);
+            }
+        }
+
+        private static void GetImgAttributes(Img img, string elementString)
+        {
+            img.Src = GetElementAttribute("src", elementString);
+            img.Alt = GetElementAttribute("alt", elementString);
+            var height = GetElementAttribute("height", elementString);
+            if (height != null)
+            {
+                img.Height = int.Parse(height);
+            }
+            var width = GetElementAttribute("width", elementString);
+            if (width != null)
+            {
+                img.Width = int.Parse(width);
+            }
         }
 
         public static string GetElementFullTag(string htmlString)
@@ -151,6 +202,15 @@ namespace SendIt.HtmlBuilder.Helpers
                 case "body":
                     element = new Body();
                     break;
+                case "caption":
+                    element = new Caption();
+                    break;
+                case "col":
+                    element = new Col();
+                    break;
+                case "colgroup":
+                    element = new ColGroup();
+                    break;
                 case "h1":
                     element = new H1();
                     break;
@@ -169,11 +229,36 @@ namespace SendIt.HtmlBuilder.Helpers
                 case "h6":
                     element = new H6();
                     break;
+                case "head":
+                    element = new Head();
+                    break;
+                // TODO: support for parsing Html tag
                 case "img":
                     element = new Img("");
                     break;
                 case "p":
                     element = new P();
+                    break;
+                case "table":
+                    element = new Table();
+                    break;
+                case "tbody":
+                    element = new TBody();
+                    break;
+                case "td":
+                    element = new TD();
+                    break;
+                case "tfoot":
+                    element = new TFoot();
+                    break;
+                case "th":
+                    element = new TH();
+                    break;
+                case "thead":
+                    element = new THead();
+                    break;
+                case "tr":
+                    element = new TR();
                     break;
                 default:
                     throw new NotSupportedException($"<{tag.ToLower()}> is not supported.");

@@ -38,6 +38,14 @@ namespace SendIt.HtmlBuilder.Tests.Helpers
             Assert.Throws<ArgumentNullException>(() => HtmlParser.Parse(input));
         }
 
+        [Fact]
+        public void WhenProvidedNotValidElement_ThenThrowsNotSupportedException()
+        {
+            var input = "<qwerty>QWERTY</qwerty>";
+
+            Assert.Throws<NotSupportedException>(() => HtmlParser.Parse(input));
+        }
+
         [Theory]
         [InlineData("<This is not a valid HTML code.>")]
         [InlineData("<This is not a valid HTML code.")]
@@ -71,8 +79,7 @@ namespace SendIt.HtmlBuilder.Tests.Helpers
             p.Style.Add(StyleProperty.Color, "#FFFFFF");
             p.Id = "id";
             var body = new Body();
-            body.AppendChild(p);
-            body.AppendChild(new Img("https://picsum.photos/400/300"));
+            body.AppendChild(p).AppendChild(new Img("https://picsum.photos/400/300"));
 
             var nodes = HtmlParser.Parse(body.ToHtml()) as List<Node>;
 
@@ -113,6 +120,82 @@ namespace SendIt.HtmlBuilder.Tests.Helpers
 
             var parsedBody = Assert.IsType<Body>(nodes[0]);
             Assert.Equal(body.InnerHtml, parsedBody.InnerHtml);
+        }
+
+        [Fact]
+        public void ParseTableWithHeaderBodyAndFooter()
+        {
+            var table = new Table()
+                .AppendChild(new THead()
+                    .AppendChild(new TR()
+                        .AppendChild(new TH("Col 1 header"))
+                        .AppendChild(new TH("Col 2 header"))))
+                .AppendChild(new TBody()
+                    .AppendChild(new TR()
+                        .AppendChild(new TH("Row 1 header"))
+                        .AppendChild(new TD("Col 2 row 1 content")))
+                    .AppendChild(new TR()
+                        .AppendChild(new TH("Row 2 content"))
+                        .AppendChild(new TD("Col 2 row 2 content"))))
+                .AppendChild(new TFoot()
+                    .AppendChild(new TR()
+                        .AppendChild(new TH("Row 3 header"))
+                        .AppendChild(new TD("Col 2 row 3 content")))) as Table;
+
+            var nodes = HtmlParser.Parse(table.ToHtml()) as List<Node>;
+
+            var parsedTable = Assert.IsType<Table>(nodes[0]);
+            Assert.Equal(table.InnerHtml, parsedTable.InnerHtml);
+        }
+
+        [Fact]
+        public void ParseTableWithCaptionAndColGroup()
+        {
+            var table = new Table()
+                .AppendChild(new Caption("Caption"))
+                .AppendChild(new ColGroup()
+                    .AppendChild(new Col())
+                    .AppendChild(new Col()))
+                .AppendChild(new TR()
+                    .AppendChild(new TH("Col 1 header", scope: Scope.Col))
+                    .AppendChild(new TH("Col 2 header", scope: Scope.Col)))
+                .AppendChild(new TR()
+                    .AppendChild(new TD("Col 1 row 2 content"))
+                    .AppendChild(new TD("Col 2 row 2 content"))) as Table;
+
+            var nodes = HtmlParser.Parse(table.ToHtml()) as List<Node>;
+
+            var parsedTable = Assert.IsType<Table>(nodes[0]);
+            Assert.Equal(table.InnerHtml, parsedTable.InnerHtml);
+        }
+
+        [Fact]
+        public void ParseTDWithAttributes()
+        {
+            var td = new TD("Content", 1, "header", 1);
+
+            var nodes = HtmlParser.Parse(td.ToHtml()) as List<Node>;
+
+            var parsedTD = Assert.IsType<TD>(nodes[0]);
+            Assert.Equal(td.ColSpan, parsedTD.ColSpan);
+            Assert.Equal(td.Headers, parsedTD.Headers);
+            Assert.Equal(td.RowSpan, parsedTD.RowSpan);
+            Assert.Equal(td.InnerHtml, parsedTD.InnerHtml);
+        }
+
+        [Fact]
+        public void ParseTHWithAttributes()
+        {
+            var th = new TH("Content", "abbr", 1, "header", 1, Scope.Col);
+
+            var nodes = HtmlParser.Parse(th.ToHtml()) as List<Node>;
+
+            var parsedTH = Assert.IsType<TH>(nodes[0]);
+            Assert.Equal(th.ColSpan, parsedTH.ColSpan);
+            Assert.Equal(th.Headers, parsedTH.Headers);
+            Assert.Equal(th.RowSpan, parsedTH.RowSpan);
+            Assert.Equal(th.Scope, parsedTH.Scope);
+            Assert.Equal(th.InnerHtml, parsedTH.InnerHtml);
         }
 
         [Fact]

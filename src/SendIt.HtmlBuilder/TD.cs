@@ -25,33 +25,59 @@ using System.Text;
 
 namespace SendIt.HtmlBuilder
 {
-    public class Head : HtmlElement
+    public class TD : HtmlElement
     {
-        public string Title { get; set; }
+        public int? ColSpan { get; set; }
+        public string Headers { get; set; }
+        public int? RowSpan { get; set; }
 
-        public Head() : base(null) { }
-
-        public Head(string title) : base(null)
+        public TD(string text = null, int? colSpan = null, string headers = null, int? rowSpan = null) : base(text)
         {
-            Title = title;
+            ColSpan = colSpan;
+            Headers = headers;
+            RowSpan = rowSpan;
+        }
+
+        protected new void AttributesToHtml(StringBuilder sb)
+        {
+
+            if (ColSpan != null)
+            {
+                sb.Append($" colspan=\"{ColSpan}\"");
+            }
+
+            if (!string.IsNullOrEmpty(Headers))
+            {
+                sb.Append($" headers=\"{Headers}\"");
+            }
+
+            if (RowSpan != null)
+            {
+                sb.Append($" rowspan=\"{RowSpan}\"");
+            }
         }
 
         public override StringBuilder ToHtml(StringBuilder sb)
         {
             OpenTag(sb);
 
-            if (!string.IsNullOrEmpty(Title))
+            // Remove trailing '>'.
+            sb.Remove(sb.Length - 1, 1);
+
+            // Add custom attributes.
+            AttributesToHtml(sb);
+
+            // Add trailing '>'.
+            sb.Append(">");
+
+            // Add child nodes.
+            foreach (var child in ChildNodes)
             {
-                sb.Append($"<title>{Title}</title>");
+                child.ToHtml(sb);
             }
 
             CloseTag(sb);
 
-            return sb;
-        }
-
-        public override StringBuilder ToText(StringBuilder sb)
-        {
             return sb;
         }
     }
