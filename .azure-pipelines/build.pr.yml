@@ -12,10 +12,10 @@ resources:
   - repository: templates
     type: git
     name: GitHub.Public/YAML.Templates
-    ref: $(templates_branch)
+    ref: feature/sc-exclusions
 
 steps:
-  - checkout: templates
+  #- checkout: templates
 
   - template: build.pr.yml@templates
     parameters:
