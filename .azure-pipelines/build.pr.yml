@@ -12,11 +12,9 @@ resources:
   - repository: templates
     type: git
     name: GitHub.Public/YAML.Templates
-    ref: feature/sc-exclusions
+    ref: main
 
 steps:
-  #- checkout: templates
-
   - template: build.pr.yml@templates
     parameters:
       projectName: SendIt.HtmlBuilder
