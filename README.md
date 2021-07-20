@@ -14,7 +14,7 @@ Download from [NuGet](https://www.nuget.org/packages/SendIt.HtmlBuilder/).
 
 ### Define HTML tags as C# objects
 
-```cs
+```csharp
 var html = new Html(new Head(), new Body());
 
 var h4 = new H4("This is a level 4 heading.");
@@ -32,7 +32,7 @@ var td4 = new TD("Cell 4");
 
 ### Create HTML DOM
 
-```cs
+```csharp
 tr1.AppendChild(td1);
 tr1.AppendChild(td2);
 tr2.AppendChild(td3);
@@ -51,7 +51,7 @@ var html = new Html(new Head(), body);
 
 ### Generate HTML string
 
-```cs
+```csharp
 var htmlString = html.ToHtml();
 Console.WriteLine(htmlString);
 ```
@@ -82,7 +82,7 @@ Output (formatted manually for readability):
 
 ### Use fluent methods
 
-```cs
+```csharp
 var htmlFluent = new Html(new Head(), new Body()
     .AppendChild(new H4("This is a level 4 heading."))
     .AppendChild(new P("This is a paragraph."))
@@ -98,7 +98,7 @@ var htmlFluent = new Html(new Head(), new Body()
 
 ### Define attributes and styling
 
-```cs
+```csharp
 var h3 = new H3("This is a level 3 heading and it is blue")
 {
     Id = "Heading3",
@@ -122,3 +122,9 @@ Output:
 
 ### Parse HTML
 
+
+```csharp
+var htmlString = "<div><h3>Hello World!</h3><p>This HTML code can be parsed by HtmlParser.</p><div>"
+
+var htmlParsed = HtmlParser.Parse(htmlString);
+```
