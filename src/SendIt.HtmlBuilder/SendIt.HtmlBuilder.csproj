@@ -8,7 +8,7 @@
     <Description>Build HTML code with C# using fluent methods.</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/filipliwinski/SendIt</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/filipliwinski/SendIt.HtmlBuilder</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageTags>sendit, html, htmlbuilder</PackageTags>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>

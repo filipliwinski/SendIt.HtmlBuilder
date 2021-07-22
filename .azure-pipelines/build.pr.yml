@@ -12,6 +12,7 @@ resources:
   - repository: templates
     type: git
     name: GitHub.Public/YAML.Templates
+    ref: main
 
 steps:
   - template: build.pr.yml@templates
