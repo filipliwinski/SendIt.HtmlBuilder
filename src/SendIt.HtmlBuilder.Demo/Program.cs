@@ -21,6 +21,7 @@
 //  SOFTWARE.
 //
 
+using SendIt.HtmlBuilder.Helpers;
 using System;
 
 namespace SendIt.HtmlBuilder.Demo
@@ -72,17 +73,19 @@ namespace SendIt.HtmlBuilder.Demo
             #endregion
             #region Use fluent methods
 
-            var htmlFluent = new Html(new Head(), new Body()
-                .AppendChild(new H4("This is a level 4 heading."))
-                .AppendChild(new P("This is a paragraph."))
-                .AppendChild(new Img("https://picsum.photos/400/300"))
-                .AppendChild(new Table()
-                    .AppendChild(new TR()
-                        .AppendChild(new TD("Cell 1"))
-                        .AppendChild(new TD("Cell 2")))
-                    .AppendChild(new TR()
-                        .AppendChild(new TD("Cell 3"))
-                        .AppendChild(new TD("Cell 4")))) as Body);
+            var htmlFluent = new Html(
+                new Head(),
+                new Body()
+                    .AppendChild(new H4("This is a level 4 heading."))
+                    .AppendChild(new P("This is a paragraph."))
+                    .AppendChild(new Img("https://picsum.photos/400/300"))
+                    .AppendChild(new Table()
+                        .AppendChild(new TR()
+                            .AppendChild(new TD("Cell 1"))
+                            .AppendChild(new TD("Cell 2")))
+                        .AppendChild(new TR()
+                            .AppendChild(new TD("Cell 3"))
+                            .AppendChild(new TD("Cell 4")))) as Body);
 
             #endregion
             #region Define attributes and styling
@@ -100,6 +103,13 @@ namespace SendIt.HtmlBuilder.Demo
 
             var h3String = h3.ToHtml();
             Console.WriteLine(h3String);
+
+            #endregion
+            #region Parse HTML
+
+            var htmlStringToParse = "<div><h3>Hello World!</h3><p>This HTML code can be parsed by HtmlParser.</p><div>";
+
+            var htmlParsed = HtmlParser.Parse(htmlStringToParse);
 
             #endregion
         }

@@ -83,17 +83,19 @@ Output (formatted manually for readability):
 ### Use fluent methods
 
 ```csharp
-var htmlFluent = new Html(new Head(), new Body()
-    .AppendChild(new H4("This is a level 4 heading."))
-    .AppendChild(new P("This is a paragraph."))
-    .AppendChild(new Img("https://picsum.photos/400/300"))
-    .AppendChild(new Table()
-        .AppendChild(new TR()
-            .AppendChild(new TD("Cell 1"))
-            .AppendChild(new TD("Cell 2")))
-        .AppendChild(new TR()
-            .AppendChild(new TD("Cell 3"))
-            .AppendChild(new TD("Cell 4")))) as Body);
+var htmlFluent = new Html(
+    new Head(),
+    new Body()
+        .AppendChild(new H4("This is a level 4 heading."))
+        .AppendChild(new P("This is a paragraph."))
+        .AppendChild(new Img("https://picsum.photos/400/300"))
+        .AppendChild(new Table()
+            .AppendChild(new TR()
+                .AppendChild(new TD("Cell 1"))
+                .AppendChild(new TD("Cell 2")))
+            .AppendChild(new TR()
+                .AppendChild(new TD("Cell 3"))
+                .AppendChild(new TD("Cell 4")))) as Body);
 ```
 
 ### Define attributes and styling
@@ -122,9 +124,8 @@ Output:
 
 ### Parse HTML
 
-
 ```csharp
-var htmlString = "<div><h3>Hello World!</h3><p>This HTML code can be parsed by HtmlParser.</p><div>"
+var htmlStringToParse = "<div><h3>Hello World!</h3><p>This HTML code can be parsed by HtmlParser.</p><div>";
 
-var htmlParsed = HtmlParser.Parse(htmlString);
+var htmlParsed = HtmlParser.Parse(htmlStringToParse);
 ```
