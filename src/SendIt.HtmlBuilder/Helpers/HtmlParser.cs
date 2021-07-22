@@ -211,6 +211,9 @@ namespace SendIt.HtmlBuilder.Helpers
                 case "colgroup":
                     element = new ColGroup();
                     break;
+                case "div":
+                    element = new Div();
+                    break;
                 case "h1":
                     element = new H1();
                     break;
@@ -236,6 +239,12 @@ namespace SendIt.HtmlBuilder.Helpers
                 case "img":
                     element = new Img("");
                     break;
+                case "li":
+                    element = new LI();
+                    break;
+                case "ol":
+                    element = new OL();
+                    break;
                 case "p":
                     element = new P();
                     break;
@@ -259,6 +268,9 @@ namespace SendIt.HtmlBuilder.Helpers
                     break;
                 case "tr":
                     element = new TR();
+                    break;
+                case "ul":
+                    element = new UL();
                     break;
                 default:
                     throw new NotSupportedException($"<{tag.ToLower()}> is not supported.");
