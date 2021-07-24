@@ -12,8 +12,11 @@ resources:
   - repository: templates
     type: git
     name: GitHub.Public/YAML.Templates
+    ref: main
 
 steps:
   - template: build.pr.yml@templates
     parameters:
       projectName: SendIt.HtmlBuilder
+      unitTestsProjectName: SendIt.HtmlBuilder.Tests
+      sonarCloudProjectKey: filipliwinski_SendIt.HtmlBuilder

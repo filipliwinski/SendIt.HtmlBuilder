@@ -25,34 +25,21 @@ using System.Text;
 
 namespace SendIt.HtmlBuilder
 {
-    public class Head : HtmlElement
+    public class Col : SelfClosing
     {
-        public string Title { get; set; }
+        public int? Span { get; set; }
 
-        public Head() : base(null) { }
-
-        public Head(string title) : base(null)
+        public Col(int? span = null) : base(null)
         {
-            Title = title;
+            Span = span;
         }
 
-        public override StringBuilder ToHtml(StringBuilder sb)
+        protected new void AttributesToHtml(StringBuilder sb)
         {
-            OpenTag(sb);
-
-            if (!string.IsNullOrEmpty(Title))
+            if (Span != null)
             {
-                sb.Append($"<title>{Title}</title>");
+                sb.Append($" span=\"{Span}\"");
             }
-
-            CloseTag(sb);
-
-            return sb;
-        }
-
-        public override StringBuilder ToText(StringBuilder sb)
-        {
-            return sb;
         }
     }
 }

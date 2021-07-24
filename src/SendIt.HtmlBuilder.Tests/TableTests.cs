@@ -21,38 +21,22 @@
 //  SOFTWARE.
 //
 
-using System.Text;
+using Xunit;
 
-namespace SendIt.HtmlBuilder
+namespace SendIt.HtmlBuilder.Tests
 {
-    public class Head : HtmlElement
+    public class TableTests
     {
-        public string Title { get; set; }
-
-        public Head() : base(null) { }
-
-        public Head(string title) : base(null)
+        [Fact]
+        public void CreatesTableElement()
         {
-            Title = title;
-        }
+            var element = new Table() { Id = "table" };
 
-        public override StringBuilder ToHtml(StringBuilder sb)
-        {
-            OpenTag(sb);
+            var elementHtmlString = element.ToHtml();
 
-            if (!string.IsNullOrEmpty(Title))
-            {
-                sb.Append($"<title>{Title}</title>");
-            }
-
-            CloseTag(sb);
-
-            return sb;
-        }
-
-        public override StringBuilder ToText(StringBuilder sb)
-        {
-            return sb;
+            Assert.IsType<Table>(element);
+            Assert.StartsWith("<table", elementHtmlString);
+            Assert.EndsWith("</table>", elementHtmlString);
         }
     }
 }

@@ -21,11 +21,40 @@
 //  SOFTWARE.
 //
 
+using SendIt.HtmlBuilder.Helpers;
+using System.Text;
+
 namespace SendIt.HtmlBuilder
 {
     public abstract class Element : Node
     {
         public string Id { get; set; }
+
+        public string InnerHtml {
+            get {
+                var htmlString = new StringBuilder();
+
+                foreach (var node in ChildNodes)
+                {
+                    node.ToHtml(htmlString);
+                }
+
+                return htmlString.ToString();
+            }
+            set {
+                ChildNodes.Clear();
+
+                if (!string.IsNullOrEmpty(value))
+                {
+                    var newChildNodes = HtmlParser.Parse(value);
+
+                    foreach (var node in newChildNodes)
+                    {
+                        AppendChild(node);
+                    }
+                }
+            }
+        }
 
         public string TagName
         {

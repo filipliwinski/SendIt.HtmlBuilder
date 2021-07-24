@@ -21,38 +21,10 @@
 //  SOFTWARE.
 //
 
-using System.Text;
-
 namespace SendIt.HtmlBuilder
 {
-    public class Head : HtmlElement
+    public class TFoot : HtmlElement
     {
-        public string Title { get; set; }
-
-        public Head() : base(null) { }
-
-        public Head(string title) : base(null)
-        {
-            Title = title;
-        }
-
-        public override StringBuilder ToHtml(StringBuilder sb)
-        {
-            OpenTag(sb);
-
-            if (!string.IsNullOrEmpty(Title))
-            {
-                sb.Append($"<title>{Title}</title>");
-            }
-
-            CloseTag(sb);
-
-            return sb;
-        }
-
-        public override StringBuilder ToText(StringBuilder sb)
-        {
-            return sb;
-        }
+        public TFoot() : base(null) { }
     }
 }

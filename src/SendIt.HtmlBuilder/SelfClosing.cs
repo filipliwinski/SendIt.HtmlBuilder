@@ -25,33 +25,23 @@ using System.Text;
 
 namespace SendIt.HtmlBuilder
 {
-    public class Head : HtmlElement
+    public abstract class SelfClosing : HtmlElement
     {
-        public string Title { get; set; }
-
-        public Head() : base(null) { }
-
-        public Head(string title) : base(null)
-        {
-            Title = title;
-        }
+        protected SelfClosing(string nodeValue) : base(nodeValue) { }
 
         public override StringBuilder ToHtml(StringBuilder sb)
         {
             OpenTag(sb);
 
-            if (!string.IsNullOrEmpty(Title))
-            {
-                sb.Append($"<title>{Title}</title>");
-            }
+            // Remove trailing '>'.
+            sb.Remove(sb.Length - 1, 1);
 
-            CloseTag(sb);
+            // Add custom attributes.
+            AttributesToHtml(sb);
 
-            return sb;
-        }
+            // Add trailing '>'.
+            sb.Append(">");
 
-        public override StringBuilder ToText(StringBuilder sb)
-        {
             return sb;
         }
     }

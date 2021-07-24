@@ -57,7 +57,7 @@ namespace SendIt.HtmlBuilder
                 sb.Append($" id=\"{Id}\"");
             }
 
-            if (Style.Count > 0)
+            if (Style != null && Style.Count > 0)
             {
                 sb.Append($" style=\"");
 
