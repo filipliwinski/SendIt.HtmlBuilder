@@ -25,6 +25,6 @@ namespace SendIt.HtmlBuilder
 {
     public class LI : HtmlElement
     {
-        public LI() : base(null) { }
+        public LI(string text = null) : base(text) { }
     }
 }
