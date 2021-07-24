@@ -25,7 +25,7 @@ using System.Text;
 
 namespace SendIt.HtmlBuilder
 {
-    public class Img : HtmlElement
+    public class Img : SelfClosing
     {
         public string Alt { get; set; }
         public int? Width { get; set; }
@@ -56,22 +56,6 @@ namespace SendIt.HtmlBuilder
             {
                 sb.Append($" width=\"{Width}\"");
             }
-        }
-
-        public override StringBuilder ToHtml(StringBuilder sb)
-        {
-            OpenTag(sb);
-
-            // Remove trailing '>'.
-            sb.Remove(sb.Length - 1, 1);
-
-            // Add custom attributes.
-            AttributesToHtml(sb);
-
-            // Img is a self-closing tag.
-            sb.Append(">");
-
-            return sb;
         }
     }
 }

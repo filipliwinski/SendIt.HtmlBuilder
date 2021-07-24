@@ -25,21 +25,24 @@ using System.Text;
 
 namespace SendIt.HtmlBuilder
 {
-    public class Col : SelfClosing
+    public abstract class SelfClosing : HtmlElement
     {
-        public int? Span { get; set; }
+        protected SelfClosing(string nodeValue) : base(nodeValue) { }
 
-        public Col(int? span = null) : base(null)
+        public override StringBuilder ToHtml(StringBuilder sb)
         {
-            Span = span;
-        }
+            OpenTag(sb);
 
-        protected new void AttributesToHtml(StringBuilder sb)
-        {
-            if (Span != null)
-            {
-                sb.Append($" span=\"{Span}\"");
-            }
+            // Remove trailing '>'.
+            sb.Remove(sb.Length - 1, 1);
+
+            // Add custom attributes.
+            AttributesToHtml(sb);
+
+            // Add trailing '>'.
+            sb.Append(">");
+
+            return sb;
         }
     }
 }
